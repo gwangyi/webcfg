@@ -1,0 +1,20 @@
+# Ignore everything
+*
+
+# Whitelist files/directories
+!*/
+!.gitignore
+!go.mod
+!go.sum
+!**/*.go
+!web/templates/**/*.tmpl
+!web/assets/**/*.css
+!web/assets/**/*.js
+!web/assets/**/*.png
+!web/assets/**/*.ico
+!web/assets/**/*.woff2
+!LICENSE
+!README.md
+
+# Keep directory structure but ignore content inside certain dirs if needed
+# (e.g., if we wanted to keep an empty assets dir but ignore contents, which is not the case here)

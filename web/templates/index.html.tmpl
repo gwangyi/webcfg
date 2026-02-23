@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ .Title }}</title>
+    {{ if .HasAssets }}<link rel="icon" type="image/x-icon" href="/assets/favicon.ico">{{ end }}
+    <link rel="stylesheet" href="/assets/css/bulma.min.css">
+    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/assets/css/solid.min.css">
+    <link rel="stylesheet" href="/assets/css/custom.css">
+  </head>
+  <body>
+  <section class="hero is-primary">
+    <div class="hero-body">
+      {{ if .HasAssets }}
+      <figure class="image is-128x128">
+        <img src="/assets/icon.png">
+      </figure>
+      {{ end }}
+      <h1 class="title">
+        {{ .Title }}
+      </h1>
+      {{ if .Subtitle }}<p class="subtitle">
+        {{ .Subtitle }}
+      </p>{{ end }}
+    </div>
+  </section>
+  {{ if .Notifications }}
+  <section class="section">
+    <div class="container">
+      {{ range .Notifications }}
+      <div class="notification{{ if .Status }} is-{{ .Status }}{{ end }}">
+      <button class="delete"></button>
+      {{ .Message }}
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+  {{ range .Sections }}
+  <section class="section">
+    <div class="container">
+      <form action="{{ .Action }}" method="POST">
+        <h2 class="title">{{ .Title }}</h2>
+        {{ if .Subtitle }}<p class="subtitle">{{ .Subtitle }}</p>{{ end }}
+        {{ range .Fields }}
+        <div class="field">
+          <div class="control{{ if .Icon }} has-icons-left{{ end }}">
+            {{ if eq .Type "textarea" }}
+            <textarea id="{{ .Name }}" name="{{ .Name }}" class="textarea{{ if .Status }} is-{{ .Status }}{{ end }}" placeholder="{{ .Label }}"{{ if .Readonly }} readonly{{ end }}>{{ .Value }}</textarea>
+            {{ else if eq .Type "checkbox" }}
+            <label class="checkbox">
+              <input id="{{ .Name }}" name="{{ .Name }}" type="checkbox"{{ if eq .Value "true" }} checked{{ end }}{{ if .Readonly }} disabled{{ end }}>
+              {{ .Label }}
+            </label>
+            {{ else }}
+            <input id="{{ .Name }}" name="{{ .Name }}" class="input{{ if .Status }} is-{{ .Status }}{{ end }}" type="{{ .Type }}" placeholder="{{ .Label }}" value="{{ .Value }}"{{ if .Readonly }} readonly{{ end }}>
+            {{ if .Icon }}
+            <span class="icon is-small is-left">
+              <i class="fas fa-{{ .Icon }}"></i>
+            </span>
+            {{ end }}
+            {{ end }}
+          </div>
+          {{ if .Help }}
+          <p class="help is-danger">{{ .Help }}</p>
+          {{ end }}
+        </div>
+        {{ end }}
+        <div class="buttons">
+          <button class="button is-primary" type="submit">
+            <span class="icon is-small">
+              <i class="fas fa-paper-plane"></i>
+            </span>
+            <span>Submit</span>
+          </button>
+          <button class="button" type="reset">
+            <span class="icon is-small">
+              <i class="fas fa-trash"></i>
+            </span>
+            <span>Reset</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+  {{ end }}
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+      const $notification = $delete.parentNode;
+
+      $delete.addEventListener('click', () => {
+        $notification.parentNode.removeChild($notification);
+      });
+    });
+  });
+  </script>
+  </body>
+</html>
+{{/* vim: ft=gohtmltmpl
+*/}}
